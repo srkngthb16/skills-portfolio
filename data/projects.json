@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "React Portfolio",
+    "description": "HTML, CSS, JS, Git ve React ile yapılmış kişisel portfolyo web sitesi.",
+    "tech": ["HTML5", "CSS", "JavaScript", "React.js", "Git"],
+    "githubUrl": "https://github.com/srkngthb16/ReactPortfolio",
+    "date": "2024-11"
+  },
+  {
+    "id": 2,
+    "title": "RoadmapSh-Personal-Portfolio",
+    "description": "Flexbox ve media query kullanılarak yapılmış responsive kişisel portfolyo sitesi.",
+    "tech": ["HTML5", "CSS"],
+    "githubUrl": "https://github.com/srkngthb16/RoadmapSh-Personal-Portfolio",
+    "date": "2025-09"
+  },
+  {
+    "id": 3,
+    "title": "RoadmapSh-Basic-HTML-Website",
+    "description": "Ana Sayfa, Projeler, Makaleler ve İletişim sayfaları içeren çok sayfalı HTML web sitesi.",
+    "tech": ["HTML5", "CSS"],
+    "githubUrl": "https://github.com/srkngthb16/RoadmapSh-Basic-HTML-Website",
+    "date": "2025-09"
+  },
+  {
+    "id": 4,
+    "title": "RoadmapSh-HtmlCV",
+    "description": "HTML, CSS ve minimum JavaScript ile oluşturulmuş tek sayfalık geliştirici CV'si.",
+    "tech": ["HTML5", "CSS", "JavaScript"],
+    "githubUrl": "https://github.com/srkngthb16/RoadmapSh-HtmlCV",
+    "date": "2025-09"
+  },
+  {
+    "id": 5,
+    "title": "RoadmapSh-Testimonial-Cards",
+    "description": "HTML ve CSS ile yapılmış responsive testimonial (referans) kart bileşeni.",
+    "tech": ["HTML5", "CSS"],
+    "githubUrl": "https://github.com/srkngthb16/RoadmapSh-Testimonial-Cards",
+    "date": "2025-10"
+  },
+  {
+    "id": 6,
+    "title": "RoadmapSh-Changelog",
+    "description": "Versiyon güncellemelerini gösteren responsive Changelog bileşeni.",
+    "tech": ["HTML5", "CSS"],
+    "githubUrl": "https://github.com/srkngthb16/RoadmapSh-changelog",
+    "date": "2025-10"
+  }
+]

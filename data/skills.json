@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "HTML5", "category": "Frontend", "level": "Orta" },
+  { "id": 2, "name": "CSS", "category": "Frontend", "level": "Orta" },
+  { "id": 3, "name": "JavaScript", "category": "Frontend", "level": "Orta" },
+  { "id": 4, "name": "React.js", "category": "Frontend", "level": "Orta" },
+  { "id": 5, "name": "Node.js", "category": "Backend", "level": "Başlangıç" },
+  { "id": 6, "name": "SQL", "category": "Veritabanı", "level": "Orta" },
+  { "id": 7, "name": "Git & GitHub", "category": "Araçlar", "level": "Orta" },
+  { "id": 8, "name": "PHP", "category": "Backend", "level": "Başlangıç" },
+  { "id": 9, "name": "C#", "category": "Diller", "level": "Başlangıç" },
+  { "id": 10, "name": "Ağ Temelleri", "category": "Diğer", "level": "Başlangıç" }
+]
