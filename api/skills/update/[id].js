@@ -30,14 +30,16 @@ export default async function handler(req, res) {
   try {
     const { data, error } = await supabase
       .from('skills')
-      .update(updates)        // SQL: UPDATE skills SET ... 
+      .update(updates)        // SQL: UPDATE skills SET ...
       .eq('id', id)           // SQL: WHERE id = :id
-      .select()
-      .single();
+      .select();
 
     if (error) throw error;
+    if (!data || data.length === 0) {
+      return res.status(404).json({ error: 'Yetenek bulunamadı' });
+    }
 
-    res.status(200).json(data);
+    res.status(200).json(data[0]);
   } catch (err) {
     console.error('Supabase hatası:', err.message);
     res.status(500).json({ error: 'Yetenek güncellenemedi' });
