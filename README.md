@@ -1,26 +1,42 @@
 # 🧩 Skills Portfolio
 
-Yeteneklerimi ve GitHub projelerimi gösteren, kendi yazdığım API üzerinden çalışan küçük bir portfolyo.
+Yeteneklerimi ve GitHub projelerimi gösteren, kendi yazdığım API üzerinden çalışan portfolyo projesi.
 
 🔗 **Canlı:** [skills-portfolio-opal.vercel.app](https://skills-portfolio-opal.vercel.app)
 
 ---
 
-## ✨ Neler var?
+## ✨ Özellikler
 
 - ⚛️ React (Vite) arayüz
 - ☁️ Vercel serverless API
-- 🐙 Projeler GitHub'dan **canlı** çekiliyor — yeni repo açtığımda otomatik görünür
-- 🎨 Sade, minimal tasarım
+- 🐙 Projeler GitHub'dan **canlı** çekiliyor
+- 🗄️ Yetenekler **Supabase** (PostgreSQL) veritabanında tutuluyor
+- 🌙 Cihaz tercihine göre otomatik **dark / light mode** (kullanıcı siteden değiştirebilir)
+- 📋 Tam **CRUD** desteği — GET, POST, PUT, DELETE
 
 ---
 
 ## 📁 Yapı
 
 ```
-api/        → /api/skills ve /api/projects endpoint'leri
-data/       → yedek (fallback) JSON verisi
-src/        → React arayüzü
+api/
+  skills/
+    index.js          → GET /api/skills
+    [id].js           → GET /api/skills/:id
+    create.js         → POST /api/skills/create
+    update/[id].js    → PUT /api/skills/update/:id
+    delete/[id].js    → DELETE /api/skills/delete/:id
+  projects/
+    index.js          → GET /api/projects  (GitHub API'den canlı)
+    [id].js           → GET /api/projects/:id
+lib/
+  supabase.js         → merkezi veritabanı bağlantısı
+data/
+  skills.json         → fallback verisi
+  projects.json       → fallback verisi
+src/
+  App.jsx             → React arayüzü
 ```
 
 ---
@@ -33,7 +49,16 @@ npm install
 vercel dev
 ```
 
-> API klasörü sadece `vercel dev` ile çalışır, düz `npm run dev` yetmez.
+> Vercel CLI olmadan `/api` klasörü çalışmaz.
+
+---
+
+## 🔐 Environment Variables
+
+| Değişken | Açıklama |
+|---|---|
+| `SUPABASE_URL` | Supabase proje URL'i |
+| `SUPABASE_ANON_KEY` | Supabase anon public key |
 
 ---
 
@@ -41,16 +66,11 @@ vercel dev
 
 1. GitHub'a pushla
 2. [vercel.com](https://vercel.com) → New Project → repoyu seç
-3. Deploy 🎉
+3. Environment variable'ları ekle
+4. Deploy 🎉
 
 ---
 
-## 🔜 Sırada ne var?
+## 🛠️ Kullanılan teknolojiler
 
-- [ ] CRUD (ekle / güncelle / sil)
-- [ ] Gerçek bir veritabanı (Supabase)
-- [ ] Authentication
-
----
-
-🛠️ React · Vite · Vercel Serverless Functions · GitHub REST API
+React · Vite · Vercel Serverless · Supabase (PostgreSQL) · GitHub REST API

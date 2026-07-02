@@ -1,12 +1,14 @@
-// App.jsx
-// Express API'mizden (server.js) yetenekleri ve projeleri çeken React uygulaması
-
 import { useState, useEffect } from 'react';
 import './index.css';
 
-// Vercel'de frontend ve API aynı domainde yayınlanır, bu yüzden
-// localhost:3000 yerine artık göreceli (relative) bir yol kullanıyoruz.
 const API_URL = '/api';
+
+// Cihazın tercihini oku
+function getInitialTheme() {
+  const saved = localStorage.getItem('theme');
+  if (saved) return saved;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
 
 function App() {
   const [skills, setSkills] = useState([]);
@@ -15,6 +17,15 @@ function App() {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [theme, setTheme] = useState(getInitialTheme);
+
+  // Tema değişince <html> elementine class ekle/çıkar ve localStorage'a kaydet
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
 
   useEffect(() => {
     async function fetchData() {
@@ -25,30 +36,21 @@ function App() {
           fetch(`${API_URL}/projects`),
         ]);
 
-        if (!skillsRes.ok || !projectsRes.ok) {
-          throw new Error('API isteği başarısız oldu');
-        }
+        if (!skillsRes.ok || !projectsRes.ok) throw new Error('API hatası');
 
-        const skillsData = await skillsRes.json();
-        const projectsData = await projectsRes.json();
-
-        setSkills(skillsData);
-        setProjects(projectsData);
+        setSkills(await skillsRes.json());
+        setProjects(await projectsRes.json());
         setError(null);
-      } catch (err) {
-        setError(
-          "API'ye bağlanılamadı. Yerelde test ediyorsan 'vercel dev' ile çalıştırdığından emin ol."
-        );
+      } catch {
+        setError("API'ye bağlanılamadı.");
       } finally {
         setLoading(false);
       }
     }
-
     fetchData();
   }, []);
 
   const categories = ['Tümü', ...new Set(skills.map((s) => s.category))];
-
   const filteredSkills =
     activeCategory === 'Tümü'
       ? skills
@@ -60,29 +62,24 @@ function App() {
     : projects.slice(0, PROJECT_PREVIEW_COUNT);
   const hasMoreProjects = projects.length > PROJECT_PREVIEW_COUNT;
 
-  if (loading) {
-    return (
-      <div className="status">
-        <div className="spinner" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return <div className="status error">{error}</div>;
-  }
+  if (loading) return <div className="status"><div className="spinner" /></div>;
+  if (error) return <div className="status error">{error}</div>;
 
   return (
     <div className="app">
       <header className="header fade-in">
-        <span className="eyebrow">Portfolyo · API</span>
+        <div className="header-top">
+          <span className="eyebrow">Portfolyo · API</span>
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Tema değiştir">
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+        </div>
         <h1>Serkan Dalgıç</h1>
         <p>Frontend Developer — Yetenekler &amp; Projeler</p>
       </header>
 
       <section className="section fade-in" style={{ animationDelay: '80ms' }}>
         <h2>Yetenekler</h2>
-
         <div className="filters">
           {categories.map((cat) => (
             <button
@@ -94,7 +91,6 @@ function App() {
             </button>
           ))}
         </div>
-
         <div className="skills-grid">
           {filteredSkills.map((skill, i) => (
             <div
@@ -111,7 +107,6 @@ function App() {
 
       <section className="section fade-in" style={{ animationDelay: '160ms' }}>
         <h2>Projeler</h2>
-
         <div className="projects-grid">
           {visibleProjects.map((project, i) => (
             <div
@@ -121,28 +116,22 @@ function App() {
             >
               <h3>{project.title}</h3>
               <p>{project.description}</p>
-
               <div className="tech-list">
                 {project.tech.map((t) => (
-                  <span key={t} className="tech-pill">
-                    {t}
-                  </span>
+                  <span key={t} className="tech-pill">{t}</span>
                 ))}
               </div>
-
               <a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="project-link"
               >
-                GitHub'da görüntüle
-                <span className="arrow">→</span>
+                GitHub'da görüntüle <span className="arrow">→</span>
               </a>
             </div>
           ))}
         </div>
-
         {hasMoreProjects && (
           <button
             className="show-more"
@@ -151,9 +140,7 @@ function App() {
             {showAllProjects
               ? 'Daha az göster'
               : `Tüm projeleri göster (${projects.length})`}
-            <span className={`chevron ${showAllProjects ? 'up' : ''}`}>
-              ⌄
-            </span>
+            <span className={`chevron ${showAllProjects ? 'up' : ''}`}>⌄</span>
           </button>
         )}
       </section>
