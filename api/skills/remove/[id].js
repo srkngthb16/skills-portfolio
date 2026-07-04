@@ -1,7 +1,7 @@
-// api/skills/delete/[id].js
-// DELETE /api/skills/delete/:id → bir yeteneği sil
+// api/skills/remove/[id].js
+// DELETE /api/skills/remove/:id → bir yeteneği sil
 //
-// Örnek: DELETE /api/skills/delete/12 → id'si 12 olan yeteneği sil
+// Örnek: DELETE /api/skills/remove/12 → id'si 12 olan yeteneği sil
 
 import { supabase } from '../../../lib/supabase.js';
 
