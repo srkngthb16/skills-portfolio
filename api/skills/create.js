@@ -5,10 +5,17 @@
 // { "name": "TypeScript", "category": "Frontend", "level": "Başlangıç" }
 
 import { supabase } from '../../lib/supabase.js';
+import { verifyToken } from '../../lib/auth.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Token kontrolü — giriş yapmamış kullanıcı ekleyemez
+  const user = await verifyToken(req);
+  if (!user) {
+    return res.status(401).json({ error: 'Yetkisiz erişim. Lütfen giriş yapın.' });
   }
 
   const { name, category, level } = req.body;

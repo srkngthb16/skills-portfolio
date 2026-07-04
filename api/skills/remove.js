@@ -2,8 +2,14 @@
 // DELETE /api/skills/remove?id=12 → bir yeteneği sil
 
 import { supabase } from '../../lib/supabase.js';
+import { verifyToken } from '../../lib/auth.js';
 
 export default async function handler(req, res) {
+  const user = await verifyToken(req);
+  if (!user) {
+    return res.status(401).json({ error: 'Yetkisiz erişim. Lütfen giriş yapın.' });
+  }
+
   const { id } = req.query;
 
   if (!id) {
