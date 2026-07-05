@@ -300,3 +300,476 @@ body {
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
+
+/* ==========================================================
+   ADMIN NAV BUTTON (ana sayfa header'ındaki "Admin" linki)
+   ========================================================== */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-nav-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.admin-nav-btn:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+  background: var(--accent-soft);
+}
+
+/* ==========================================================
+   LOGIN SAYFASI
+   ========================================================== */
+
+@keyframes floatBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -25px) scale(1.05); }
+  66% { transform: translate(-15px, 15px) scale(0.97); }
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.login-bg {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  overflow: hidden;
+  padding: 24px;
+}
+
+/* Arka planda yavaşça hareket eden, dekoratif bulanık şekiller */
+.login-bg::before,
+.login-bg::after {
+  content: '';
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.16;
+  filter: blur(70px);
+  animation: floatBlob 14s ease-in-out infinite;
+  pointer-events: none;
+}
+.login-bg::before { top: -120px; left: -100px; }
+.login-bg::after {
+  bottom: -140px;
+  right: -100px;
+  animation-delay: -6s;
+  background: var(--ink);
+  opacity: 0.06;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.25);
+  animation: cardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+}
+
+.login-header {
+  display: flex;
+  gap: 6px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.login-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  animation: dotPulse 2.4s ease-in-out infinite;
+}
+.login-dot:nth-child(1) { animation-delay: 0s; }
+.login-dot:nth-child(2) { animation-delay: 0.25s; }
+.login-dot:nth-child(3) { animation-delay: 0.5s; }
+
+.login-body { padding: 36px 32px 32px; }
+
+.login-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.login-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+
+.login-sub {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+  margin: 0 0 28px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.field-wrap {
+  position: relative;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 14px 14px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-family: inherit;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.login-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Floating label — inputa yazınca yukarı kayıyor */
+.login-label {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  pointer-events: none;
+  transition: all 0.18s ease;
+  background: var(--bg);
+  padding: 0 4px;
+}
+.login-input:focus + .login-label,
+.login-input:not(:placeholder-shown) + .login-label {
+  top: -8px;
+  left: 10px;
+  font-size: 0.72rem;
+  color: var(--accent-text);
+  background: var(--surface);
+}
+
+.login-error {
+  color: #c14a3a;
+  font-size: 0.82rem;
+  margin: -4px 0 0;
+  animation: shake 0.35s ease;
+}
+
+.login-btn {
+  margin-top: 6px;
+  padding: 13px;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.login-btn:hover { transform: translateY(-1px); }
+.login-btn:active { transform: translateY(0); }
+.login-btn:disabled { opacity: 0.7; cursor: default; }
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--bg);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* ==========================================================
+   ADMIN PANELİ
+   ========================================================== */
+
+.admin-wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 40px 24px 96px;
+  animation: fadeIn 0.4s ease;
+}
+
+.admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-eyebrow {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.admin-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-link {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.admin-link:hover { color: var(--ink); }
+
+.admin-logout {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.admin-logout:hover {
+  border-color: #c14a3a;
+  color: #c14a3a;
+}
+
+.admin-section {
+  margin-bottom: 40px;
+  animation: fadeInUp 0.4s ease;
+}
+
+.admin-section-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.admin-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+/* Yetenek listesi */
+.skills-table {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr auto;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: transform 0.25s ease, opacity 0.25s ease, border-color 0.18s ease;
+}
+.skill-row:hover { border-color: var(--accent); }
+
+.skill-row.removing {
+  transform: translateX(24px) scale(0.97);
+  opacity: 0;
+}
+
+.row-name {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+.row-category, .row-level {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.btn-edit, .btn-delete, .btn-save, .btn-cancel {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  padding: 6px 12px;
+  border-radius: 7px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-edit:hover { border-color: var(--accent); color: var(--ink); }
+.btn-delete:hover { border-color: #c14a3a; color: #c14a3a; }
+.btn-save {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.btn-save:hover { opacity: 0.85; }
+.btn-cancel:hover { color: var(--ink); }
+
+.edit-input, .edit-select {
+  padding: 7px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+/* Yeni yetenek ekleme formu */
+.add-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.add-input {
+  flex: 1;
+  min-width: 160px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-family: inherit;
+  transition: border-color 0.15s ease;
+}
+.add-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-select {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-family: inherit;
+}
+
+.add-btn {
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.add-btn:hover { transform: translateY(-1px); }
+.add-btn.success { background: #3a9d6f; }
+.add-btn.error { background: #c14a3a; }
+
+/* Toast bildirimi */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-12px) translateX(-50%); }
+  to { opacity: 1; transform: translateY(0) translateX(-50%); }
+}
+
+.admin-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  z-index: 100;
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.4);
+  animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.admin-toast.error { background: #c14a3a; }
+
+@media (max-width: 640px) {
+  .skill-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .row-actions { justify-content: flex-start; margin-top: 6px; }
+}
