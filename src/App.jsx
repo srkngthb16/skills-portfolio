@@ -83,7 +83,17 @@ export default function App() {
   }, [page]);
 
   // Login sayfası
-  if (page === 'login') return <Login onLogin={handleLogin} />;
+  if (page === 'login') {
+    return (
+      <Login
+        onLogin={handleLogin}
+        onClose={() => {
+          setPage('home');
+          window.location.hash = '';
+        }}
+      />
+    );
+  }
 
   // Admin paneli
   if (page === 'admin') {
