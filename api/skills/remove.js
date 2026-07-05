@@ -1,12 +1,11 @@
 // api/skills/remove.js
-// DELETE /api/skills/remove?id=12 → bir yeteneği sil
+// DELETE /api/skills/remove?id=12 → yeteneği sil (token gerekli)
 
-import { supabase } from '../../lib/supabase.js';
 import { verifyToken } from '../../lib/auth.js';
 
 export default async function handler(req, res) {
-  const user = await verifyToken(req);
-  if (!user) {
+  const auth = await verifyToken(req);
+  if (!auth) {
     return res.status(401).json({ error: 'Yetkisiz erişim. Lütfen giriş yapın.' });
   }
 
@@ -17,14 +16,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await auth.supabase
       .from('skills')
       .delete()
       .eq('id', id)
       .select();
 
     if (error) throw error;
-
     if (!data || data.length === 0) {
       return res.status(404).json({ error: 'Yetenek bulunamadı' });
     }

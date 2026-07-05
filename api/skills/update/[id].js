@@ -1,10 +1,6 @@
 // api/skills/update/[id].js
-// PUT /api/skills/update/:id → mevcut bir yeteneği güncelle
-//
-// Body olarak şunu bekliyoruz (hepsi opsiyonel, sadece değişeni gönder):
-// { "name": "TypeScript", "category": "Frontend", "level": "Orta" }
+// PUT /api/skills/update/:id → mevcut yeteneği güncelle (token gerekli)
 
-import { supabase } from '../../../lib/supabase.js';
 import { verifyToken } from '../../../lib/auth.js';
 
 export default async function handler(req, res) {
@@ -12,32 +8,28 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const user = await verifyToken(req);
-  if (!user) {
+  const auth = await verifyToken(req);
+  if (!auth) {
     return res.status(401).json({ error: 'Yetkisiz erişim. Lütfen giriş yapın.' });
   }
 
   const { id } = req.query;
   const { name, category, level } = req.body;
 
-  // En az bir alan gönderilmiş olmalı
   if (!name && !category && !level) {
-    return res.status(400).json({
-      error: 'Güncellenecek en az bir alan gerekli (name, category veya level)',
-    });
+    return res.status(400).json({ error: 'En az bir alan gerekli' });
   }
 
-  // Sadece gönderilen alanları güncelle
   const updates = {};
   if (name) updates.name = name;
   if (category) updates.category = category;
   if (level) updates.level = level;
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await auth.supabase
       .from('skills')
-      .update(updates)        // SQL: UPDATE skills SET ...
-      .eq('id', id)           // SQL: WHERE id = :id
+      .update(updates)
+      .eq('id', id)
       .select();
 
     if (error) throw error;
