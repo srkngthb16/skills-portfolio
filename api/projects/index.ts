@@ -10,6 +10,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import type { GitHubRepo, Project } from '../../lib/types.js';
+import { applyCors } from '../../lib/cors.js';
 
 const GITHUB_USERNAME = 'srkngthb16';
 const GITHUB_API = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=created&direction=desc&per_page=100`;
@@ -37,6 +38,8 @@ function mapRepoToProject(repo: GitHubRepo): Project {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (applyCors(req, res)) return;
+
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

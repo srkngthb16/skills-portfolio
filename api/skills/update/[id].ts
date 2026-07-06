@@ -3,9 +3,12 @@
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { verifyToken } from '../../../lib/auth.js';
-import type { SkillUpdate } from '../../../lib/types.js';
+import { applyCors } from '../../../lib/cors.js';
+import { validateSkillUpdateInput } from '../../../lib/validate.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (applyCors(req, res)) return;
+
   if (req.method !== 'PUT') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -18,23 +21,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const idParam = req.query.id;
   const id = Array.isArray(idParam) ? idParam[0] : idParam;
 
-  const { name, category, level } = req.body as SkillUpdate;
-
-  if (!name && !category && !level) {
-    return res.status(400).json({ error: 'En az bir alan gerekli' });
+  const result = validateSkillUpdateInput(req.body);
+  if (!result.valid) {
+    return res.status(400).json({ error: result.error });
   }
-
-  // updates'i SkillUpdate tipiyle tanımlıyoruz — böylece TypeScript
-  // "updates.name = ..." satırlarının geçerli olduğunu biliyor.
-  const updates: SkillUpdate = {};
-  if (name) updates.name = name;
-  if (category) updates.category = category;
-  if (level) updates.level = level;
 
   try {
     const { data, error } = await auth.supabase
       .from('skills')
-      .update(updates)
+      .update(result.data)
       .eq('id', id)
       .select();
 

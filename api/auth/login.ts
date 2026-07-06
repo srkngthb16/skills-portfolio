@@ -4,24 +4,35 @@
 // Supabase Auth kullanıyoruz — şifreyi biz tutmuyoruz, Supabase yönetiyor.
 // Başarılı girişte Supabase bize bir access_token döner.
 // Bu token'ı bundan sonra her CRUD isteğinde header'da göndereceğiz.
+//
+// Güvenlik notu: bu endpoint rate-limit'li — aynı IP 5 dakikada en fazla
+// 5 kez deneyebilir. Bu, şifre tahmin etmeye çalışan (brute-force) bir
+// saldırıyı önemli ölçüde yavaşlatır.
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { supabase } from '../../lib/supabase.js';
+import { applyCors } from '../../lib/cors.js';
+import { isRateLimited, getClientIp } from '../../lib/rateLimit.js';
 
-// İstek body'sinin nasıl bir şekle sahip olmasını beklediğimizi tanımlıyoruz.
-// Bu bir "interface" — TypeScript'e "bu obje şu alanlara sahip olmalı" diyoruz.
 interface LoginBody {
   email: string;
   password: string;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (applyCors(req, res)) return; // preflight isteği ise burada dur
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // req.body varsayılan olarak "any" tipindedir (Vercel ne geleceğini bilemez),
-  // bu yüzden bizim beklediğimiz şekle (LoginBody) olduğunu belirtiyoruz.
+  const ip = getClientIp(req);
+  if (isRateLimited(`login:${ip}`)) {
+    return res.status(429).json({
+      error: 'Çok fazla deneme yapıldı. Lütfen birkaç dakika sonra tekrar deneyin.',
+    });
+  }
+
   const { email, password } = req.body as LoginBody;
 
   if (!email || !password) {
@@ -48,8 +59,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       },
     });
   } catch (err) {
-    // TypeScript'te catch bloğundaki hata "unknown" tipindedir —
-    // yani hangi tür bir hata olduğunu garanti edemeyiz, önce kontrol etmeliyiz.
     const message = err instanceof Error ? err.message : 'Bilinmeyen hata';
     console.error('Auth hatası:', message);
     res.status(500).json({ error: 'Giriş yapılamadı' });

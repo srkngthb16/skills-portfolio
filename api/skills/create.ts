@@ -3,9 +3,12 @@
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { verifyToken } from '../../lib/auth.js';
-import type { NewSkill } from '../../lib/types.js';
+import { applyCors } from '../../lib/cors.js';
+import { validateSkillInput } from '../../lib/validate.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (applyCors(req, res)) return;
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -15,18 +18,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: 'Yetkisiz erişim. Lütfen giriş yapın.' });
   }
 
-  // req.body'nin NewSkill şekline uyduğunu belirtiyoruz —
-  // yani { name, category, level } bekliyoruz.
-  const { name, category, level } = req.body as NewSkill;
-
-  if (!name || !category || !level) {
-    return res.status(400).json({ error: 'name, category ve level zorunludur' });
+  // Girdiyi doğruluyoruz — sadece "boş mu" değil, uzunluk ve izin verilen
+  // kategori/seviye değerlerine de bakıyoruz.
+  const result = validateSkillInput(req.body);
+  if (!result.valid) {
+    return res.status(400).json({ error: result.error });
   }
 
   try {
     const { data, error } = await auth.supabase
       .from('skills')
-      .insert({ name, category, level })
+      .insert(result.data)
       .select()
       .single();
 

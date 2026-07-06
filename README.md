@@ -16,6 +16,7 @@ Yeteneklerimi ve GitHub projelerimi gösteren, kendi yazdığım API üzerinden 
 - 🛠️ Animasyonlu **admin paneli** — giriş yap, yetenek ekle/düzenle/sil
 - 🌙 Cihaz tercihine göre otomatik **dark / light mode**
 - 📋 Tam **CRUD** desteği — GET, POST, PUT, DELETE
+- 🛡️ Güvenlik katmanı — CORS, rate limiting, input validation, security header'ları
 
 ---
 
@@ -37,6 +38,9 @@ api/
 lib/
   supabase.ts           → merkezi veritabanı bağlantısı
   auth.ts               → JWT doğrulama + authenticated Supabase client
+  cors.ts               → CORS politikası (izinli origin kontrolü)
+  rateLimit.ts          → login için brute-force koruması
+  validate.ts           → girdi doğrulama ve temizleme
   types.ts              → paylaşılan backend tipleri
 data/
   skills.json           → fallback verisi
@@ -85,6 +89,28 @@ Ana sayfadaki **Admin** butonuna basarak giriş ekranına ulaşılır (`/#login`
 
 ---
 
+## 🛡️ Güvenlik
+
+Bu proje, OWASP Top 10'daki yaygın web açıklarına karşı şu önlemleri alıyor:
+
+| Tehdit | Önlem |
+|---|---|
+| **SQL Injection** | Supabase client parametreli sorgu kullanıyor, ham SQL string birleştirme yok |
+| **Brute-force (kimlik doğrulama)** | `/api/auth/login` rate-limitli — aynı IP 5 dakikada en fazla 5 deneme (`lib/rateLimit.ts`) |
+| **XSS** | React varsayılan olarak render edilen metni escape eder; girdiler ayrıca sunucu tarafında da doğrulanır (`lib/validate.ts`) |
+| **CSRF** | Cookie tabanlı oturum yok — Bearer token (JWT) kullanılıyor, tarayıcı bunu otomatik göndermez |
+| **CORS** | API sadece izinli origin'lerden (kendi sitemiz + yerel geliştirme) çağrılabilir (`lib/cors.ts`) |
+| **Yetkisiz veri değişikliği** | Yazma işlemleri (POST/PUT/DELETE) JWT + Supabase RLS ile çift katmanlı korunuyor |
+| **Şifre güvenliği** | Şifreler bizim tarafımızdan değil, Supabase Auth (bcrypt) tarafından hash'leniyor |
+| **Clickjacking** | `X-Frame-Options: DENY` header'ı sayfanın iframe içine gömülmesini engelliyor |
+| **MIME sniffing** | `X-Content-Type-Options: nosniff` header'ı |
+| **HTTPS zorlaması** | `Strict-Transport-Security` header'ı + Vercel'in otomatik HTTPS'i |
+| **Girdi doğrulama** | İsim uzunluğu sınırlı, kategori/seviye alanları sabit bir listeyle (whitelist) kontrol ediliyor |
+
+**Bilinçli kabul edilen sınırlama:** Rate limiter bellek-içi (in-memory) çalışıyor — Vercel fonksiyonu "cold start" olduğunda sıfırlanabilir. Küçük ölçekli bir proje için yeterli bir ilk koruma katmanı; büyük ölçekte Upstash Redis veya Vercel KV gibi paylaşımlı bir depo kullanılması gerekir.
+
+---
+
 ## 🚀 Deploy
 
 1. GitHub'a pushla
@@ -102,7 +128,7 @@ React · TypeScript · Vite · Vercel Serverless Functions · Supabase (PostgreS
 
 ## 🔜 Sırada ne var?
 
-- [ ] Backend Security (rate limiting, input sanitization)
-- [ ] Web Güvenliği (CORS politikası, güvenlik header'ları)
+- [x] Backend Security (rate limiting, input sanitization)
+- [x] Web Güvenliği (CORS politikası, güvenlik header'ları)
 - [ ] Test (Jest ile API endpoint testleri)
 - [ ] CI/CD (GitHub Actions)
