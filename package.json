@@ -8,7 +8,9 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.api.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.api.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.0",
@@ -23,6 +25,7 @@
     "@vitejs/plugin-react": "^6.0.2",
     "oxlint": "^1.69.0",
     "typescript": "^6.0.3",
-    "vite": "^8.1.0"
+    "vite": "^8.1.0",
+    "vitest": "^4.1.10"
   }
 }

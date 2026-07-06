@@ -51,6 +51,12 @@ src/
   pages/
     Login.tsx           → admin giriş ekranı
     Admin.tsx           → admin paneli (CRUD arayüzü)
+tests/
+  lib/                  → saf mantık testleri (validate, rateLimit, cors)
+  api/                  → handler testleri (Supabase/GitHub mock'lanarak)
+  helpers/              → test yardımcıları (mock req/res, mock Supabase client)
+.github/workflows/
+  ci.yml                → her push'ta typecheck + test + build çalıştırır
 ```
 
 ---
@@ -71,6 +77,13 @@ Tip kontrolü için:
 npm run typecheck
 ```
 
+Testleri çalıştırmak için:
+
+```bash
+npm test          # tek seferlik çalıştırma
+npm run test:watch # dosya değiştikçe otomatik yeniden çalıştırma
+```
+
 ---
 
 ## 🔐 Environment Variables
@@ -86,6 +99,29 @@ npm run typecheck
 ## 🔑 Admin Paneli
 
 Ana sayfadaki **Admin** butonuna basarak giriş ekranına ulaşılır (`/#login`). Giriş yapıldığında JWT token alınır ve yetenek ekleme/düzenleme/silme işlemleri bu token ile korunur. Kayıt (signup) özelliği bilinçli olarak kapalıdır — bu proje tek admin (tek kullanıcı) mantığıyla çalışır.
+
+---
+
+## 🧪 Test
+
+**Vitest** kullanıyoruz — roadmap'te "Jest" geçse de, proje zaten Vite kullandığı için Vitest ekstra yapılandırma gerektirmeden aynı API'yle (`describe`, `it`, `expect`) çalışıyor.
+
+44 test şunları kapsıyor:
+- **Saf mantık testleri** — `validate.ts`, `rateLimit.ts`, `cors.ts` (dış bağımlılık yok, en güvenilir testler)
+- **API handler testleri** — Supabase ve GitHub API'si "mock"lanarak (gerçek ağ isteği atılmadan) `login`, `create`, `remove`, `skills`, `projects` endpoint'leri test ediliyor
+- **Güvenlik davranışı testleri** — rate limiter'ın gerçekten 6. denemeyi engellediği, CORS'un izinsiz origin'e header eklemediği gibi senaryolar
+
+---
+
+## ⚙️ CI/CD
+
+`.github/workflows/ci.yml` — `main` branch'ine her push/PR'da otomatik olarak:
+1. Bağımlılıkları kurar
+2. Tip kontrolü yapar (`npm run typecheck`)
+3. Testleri çalıştırır (`npm test`)
+4. Production build alır (`npm run build`)
+
+Herhangi biri başarısız olursa GitHub'da kırmızı ✕ görünür — kod Vercel'e deploy olmadan hatayı erkenden yakalamış oluruz.
 
 ---
 
@@ -130,5 +166,5 @@ React · TypeScript · Vite · Vercel Serverless Functions · Supabase (PostgreS
 
 - [x] Backend Security (rate limiting, input sanitization)
 - [x] Web Güvenliği (CORS politikası, güvenlik header'ları)
-- [ ] Test (Jest ile API endpoint testleri)
-- [ ] CI/CD (GitHub Actions)
+- [x] Test (Vitest ile 44 test — unit + handler testleri)
+- [x] CI/CD (GitHub Actions — typecheck + test + build)

@@ -14,5 +14,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["api", "lib"]
+  "include": ["api", "lib", "tests"]
 }
