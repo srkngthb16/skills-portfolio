@@ -522,35 +522,6 @@ body {
   animation: shake 0.35s ease;
 }
 
-.login-info {
-  color: #3a9d6f;
-  font-size: 0.82rem;
-  margin: -4px 0 0;
-  line-height: 1.5;
-}
-
-.login-switch {
-  text-align: center;
-  margin: 20px 0 0;
-  font-size: 0.84rem;
-  color: var(--text-dim);
-}
-.login-switch button {
-  background: none;
-  border: none;
-  color: var(--accent-text);
-  font-weight: 600;
-  font-size: 0.84rem;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: text-decoration-color 0.15s ease;
-}
-.login-switch button:hover {
-  text-decoration-color: var(--accent-text);
-}
-
 .login-btn {
   margin-top: 6px;
   padding: 13px;

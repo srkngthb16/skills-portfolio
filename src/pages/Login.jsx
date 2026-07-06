@@ -2,30 +2,18 @@
 import { useState } from 'react';
 
 export default function Login({ onLogin, onClose }) {
-  const [mode, setMode] = useState('login'); // 'login' | 'signup'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [status, setStatus] = useState('idle'); // idle | loading | error | success
+  const [status, setStatus] = useState('idle'); // idle | loading | error
   const [errorMsg, setErrorMsg] = useState('');
-  const [infoMsg, setInfoMsg] = useState('');
-
-  function switchMode(next) {
-    setMode(next);
-    setStatus('idle');
-    setErrorMsg('');
-    setInfoMsg('');
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
     setStatus('loading');
     setErrorMsg('');
-    setInfoMsg('');
-
-    const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/signup';
 
     try {
-      const res = await fetch(endpoint, {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -36,14 +24,6 @@ export default function Login({ onLogin, onClose }) {
       if (!res.ok) {
         setStatus('error');
         setErrorMsg(data.error || 'Bir şeyler ters gitti');
-        return;
-      }
-
-      if (mode === 'signup') {
-        // Kayıt başarılı — Supabase genelde e-posta doğrulaması bekler,
-        // bu yüzden direkt giriş yapmıyoruz, kullanıcıyı bilgilendiriyoruz.
-        setStatus('success');
-        setInfoMsg('Hesap oluşturuldu. E-postanı doğruladıktan sonra giriş yapabilirsin.');
         return;
       }
 
@@ -60,7 +40,6 @@ export default function Login({ onLogin, onClose }) {
     <div
       className="login-bg"
       onClick={(e) => {
-        // Sadece arka plana (kartın dışına) tıklanınca kapat
         if (e.target === e.currentTarget) onClose?.();
       }}
     >
@@ -80,9 +59,7 @@ export default function Login({ onLogin, onClose }) {
         </div>
 
         <div className="login-body">
-          <p className="login-eyebrow">
-            {mode === 'login' ? 'Admin Girişi' : 'Hesap Oluştur'}
-          </p>
+          <p className="login-eyebrow">Admin Girişi</p>
           <h1 className="login-title">Serkan Dalgıç</h1>
           <p className="login-sub">Skills Portfolio yönetim paneli</p>
 
@@ -111,44 +88,21 @@ export default function Login({ onLogin, onClose }) {
                 placeholder=" "
                 required
                 minLength={6}
-                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                autoComplete="current-password"
               />
               <label className="login-label" htmlFor="password">Şifre</label>
             </div>
 
             {errorMsg && <p className="login-error">{errorMsg}</p>}
-            {infoMsg && <p className="login-info">{infoMsg}</p>}
 
             <button
-              className={`login-btn ${status === 'loading' ? 'loading' : ''}`}
+              className="login-btn"
               type="submit"
               disabled={status === 'loading'}
             >
-              {status === 'loading' ? (
-                <span className="btn-spinner" />
-              ) : mode === 'login' ? (
-                'Giriş Yap'
-              ) : (
-                'Kayıt Ol'
-              )}
+              {status === 'loading' ? <span className="btn-spinner" /> : 'Giriş Yap'}
             </button>
           </form>
-
-          <p className="login-switch">
-            {mode === 'login' ? (
-              <>Hesabın yok mu?{' '}
-                <button type="button" onClick={() => switchMode('signup')}>
-                  Kayıt ol
-                </button>
-              </>
-            ) : (
-              <>Zaten hesabın var mı?{' '}
-                <button type="button" onClick={() => switchMode('login')}>
-                  Giriş yap
-                </button>
-              </>
-            )}
-          </p>
         </div>
       </div>
     </div>
