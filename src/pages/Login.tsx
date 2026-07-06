@@ -1,13 +1,23 @@
-// src/pages/Login.jsx
-import { useState } from 'react';
+// src/pages/Login.tsx
+import { useState, type FormEvent } from 'react';
 
-export default function Login({ onLogin, onClose }) {
+// Bu bileşenin hangi prop'ları kabul ettiğini tanımlıyoruz.
+// onLogin: giriş başarılı olduğunda çağrılır, token'ı parametre olarak alır.
+// onClose: kullanıcı login ekranını kapatmak istediğinde çağrılır (opsiyonel).
+interface LoginProps {
+  onLogin: (token: string) => void;
+  onClose?: () => void;
+}
+
+type Status = 'idle' | 'loading' | 'error';
+
+export default function Login({ onLogin, onClose }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [status, setStatus] = useState('idle'); // idle | loading | error
+  const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus('loading');
     setErrorMsg('');

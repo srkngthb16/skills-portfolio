@@ -1,22 +1,51 @@
-// src/pages/Admin.jsx
-import { useState, useEffect } from 'react';
+// src/pages/Admin.tsx
+import { useState, useEffect, type FormEvent } from 'react';
+import type { Skill } from '../types.ts';
 
-const CATEGORIES = ['Frontend', 'Backend', 'Veritabanı', 'Araçlar', 'Diller', 'Diğer'];
-const LEVELS = ['Başlangıç', 'Orta', 'İleri'];
+const CATEGORIES = ['Frontend', 'Backend', 'Veritabanı', 'Araçlar', 'Diller', 'Diğer'] as const;
+const LEVELS = ['Başlangıç', 'Orta', 'İleri'] as const;
 
-export default function Admin({ token, onLogout }) {
-  const [skills, setSkills] = useState([]);
+interface AdminProps {
+  token: string;
+  onLogout: () => void;
+}
+
+// Yeni yetenek eklerken kullandığımız form şekli — Skill'den id/created_at
+// olmadan sadece girilebilecek alanları alıyoruz.
+interface SkillFormData {
+  name: string;
+  category: string;
+  level: string;
+}
+
+type AddStatus = 'idle' | 'loading' | 'success' | 'error';
+
+interface Toast {
+  msg: string;
+  type: 'success' | 'error';
+}
+
+export default function Admin({ token, onLogout }: AdminProps) {
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({});
-  const [newSkill, setNewSkill] = useState({ name: '', category: 'Frontend', level: 'Orta' });
-  const [addStatus, setAddStatus] = useState('idle'); // idle | loading | success | error
-  const [removingId, setRemovingId] = useState(null);
-  const [toast, setToast] = useState(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState<SkillFormData>({
+    name: '',
+    category: 'Frontend',
+    level: 'Orta',
+  });
+  const [newSkill, setNewSkill] = useState<SkillFormData>({
+    name: '',
+    category: 'Frontend',
+    level: 'Orta',
+  });
+  const [addStatus, setAddStatus] = useState<AddStatus>('idle');
+  const [removingId, setRemovingId] = useState<number | null>(null);
+  const [toast, setToast] = useState<Toast | null>(null);
 
   const authHeader = { Authorization: `Bearer ${token}` };
 
-  function showToast(msg, type = 'success') {
+  function showToast(msg: string, type: Toast['type'] = 'success') {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 3000);
   }
@@ -24,14 +53,16 @@ export default function Admin({ token, onLogout }) {
   async function fetchSkills() {
     setLoading(true);
     const res = await fetch('/api/skills');
-    const data = await res.json();
+    const data: Skill[] = await res.json();
     setSkills(data);
     setLoading(false);
   }
 
-  useEffect(() => { fetchSkills(); }, []);
+  useEffect(() => {
+    fetchSkills();
+  }, []);
 
-  async function handleAdd(e) {
+  async function handleAdd(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setAddStatus('loading');
     try {
@@ -41,7 +72,7 @@ export default function Admin({ token, onLogout }) {
         body: JSON.stringify(newSkill),
       });
       if (!res.ok) throw new Error();
-      const added = await res.json();
+      const added: Skill = await res.json();
       setSkills((prev) => [...prev, added]);
       setNewSkill({ name: '', category: 'Frontend', level: 'Orta' });
       setAddStatus('success');
@@ -54,12 +85,12 @@ export default function Admin({ token, onLogout }) {
     }
   }
 
-  function startEdit(skill) {
+  function startEdit(skill: Skill) {
     setEditingId(skill.id);
     setEditForm({ name: skill.name, category: skill.category, level: skill.level });
   }
 
-  async function handleUpdate(id) {
+  async function handleUpdate(id: number) {
     try {
       const res = await fetch(`/api/skills/update/${id}`, {
         method: 'PUT',
@@ -67,7 +98,7 @@ export default function Admin({ token, onLogout }) {
         body: JSON.stringify(editForm),
       });
       if (!res.ok) throw new Error();
-      const updated = await res.json();
+      const updated: Skill = await res.json();
       setSkills((prev) => prev.map((s) => (s.id === id ? updated : s)));
       setEditingId(null);
       showToast(`"${updated.name}" güncellendi`);
@@ -76,7 +107,7 @@ export default function Admin({ token, onLogout }) {
     }
   }
 
-  async function handleRemove(skill) {
+  async function handleRemove(skill: Skill) {
     setRemovingId(skill.id);
     await new Promise((r) => setTimeout(r, 350)); // animasyon için bekle
     try {
@@ -96,15 +127,12 @@ export default function Admin({ token, onLogout }) {
 
   return (
     <div className="admin-wrap">
-
-      {/* Toast */}
       {toast && (
         <div className={`admin-toast ${toast.type}`}>
           {toast.type === 'success' ? '✓' : '✕'} {toast.msg}
         </div>
       )}
 
-      {/* Header */}
       <header className="admin-header">
         <div className="admin-header-left">
           <span className="admin-eyebrow">Admin Paneli</span>
@@ -117,8 +145,6 @@ export default function Admin({ token, onLogout }) {
       </header>
 
       <main className="admin-main">
-
-        {/* Yetenek listesi */}
         <section className="admin-section">
           <p className="admin-section-label">Mevcut Yetenekler ({skills.length})</p>
 
@@ -176,7 +202,6 @@ export default function Admin({ token, onLogout }) {
           )}
         </section>
 
-        {/* Yeni yetenek ekle */}
         <section className="admin-section">
           <p className="admin-section-label">Yeni Yetenek Ekle</p>
           <form className="add-form" onSubmit={handleAdd}>
@@ -212,7 +237,6 @@ export default function Admin({ token, onLogout }) {
             </button>
           </form>
         </section>
-
       </main>
     </div>
   );

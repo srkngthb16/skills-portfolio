@@ -1,32 +1,35 @@
 import { useState, useEffect } from 'react';
-import Login from './pages/Login.jsx';
-import Admin from './pages/Admin.jsx';
+import Login from './pages/Login.tsx';
+import Admin from './pages/Admin.tsx';
+import type { Skill, Project, Theme, Page } from './types.ts';
 import './index.css';
 
 const API_URL = '/api';
 
-function getInitialTheme() {
+function getInitialTheme(): Theme {
   const saved = localStorage.getItem('theme');
-  if (saved) return saved;
+  if (saved === 'light' || saved === 'dark') return saved;
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-function getInitialPage() {
+function getInitialPage(): Page {
   if (window.location.hash === '#admin') return 'admin';
   if (window.location.hash === '#login') return 'login';
   return 'home';
 }
 
 export default function App() {
-  const [page, setPage] = useState(getInitialPage);
-  const [token, setToken] = useState(() => localStorage.getItem('access_token'));
-  const [skills, setSkills] = useState([]);
-  const [projects, setProjects] = useState([]);
+  const [page, setPage] = useState<Page>(getInitialPage);
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem('access_token')
+  );
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [activeCategory, setActiveCategory] = useState('Tümü');
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [theme, setTheme] = useState(getInitialTheme);
+  const [error, setError] = useState<string | null>(null);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -47,7 +50,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash);
   }, [token]);
 
-  function handleLogin(t) {
+  function handleLogin(t: string) {
     setToken(t);
     setPage('admin');
     window.location.hash = '#admin';
@@ -106,12 +109,15 @@ export default function App() {
 
   // Ana sayfa
   const categories = ['Tümü', ...new Set(skills.map((s) => s.category))];
-  const filteredSkills = activeCategory === 'Tümü'
-    ? skills : skills.filter((s) => s.category === activeCategory);
+  const filteredSkills =
+    activeCategory === 'Tümü'
+      ? skills
+      : skills.filter((s) => s.category === activeCategory);
 
   const PROJECT_PREVIEW_COUNT = 6;
   const visibleProjects = showAllProjects
-    ? projects : projects.slice(0, PROJECT_PREVIEW_COUNT);
+    ? projects
+    : projects.slice(0, PROJECT_PREVIEW_COUNT);
   const hasMoreProjects = projects.length > PROJECT_PREVIEW_COUNT;
 
   if (loading) return <div className="status"><div className="spinner" /></div>;
