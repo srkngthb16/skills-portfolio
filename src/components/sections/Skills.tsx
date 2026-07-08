@@ -14,7 +14,7 @@ export default function Skills({
   filteredSkills,
 }: SkillsProps) {
   return (
-    <section className="section fade-in" style={{ animationDelay: '80ms' }}>
+    <section id="skills" className="section fade-in" style={{ animationDelay: '80ms' }}>
       <h2>Yetenekler</h2>
       <div className="filters">
         {categories.map((cat) => (

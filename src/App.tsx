@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import Login from './pages/Login.tsx';
 import Admin from './pages/Admin.tsx';
-import Header from './components/layout/Header.tsx';
+import Navbar from './components/layout/Navbar.tsx';
+import Hero from './components/sections/Hero.tsx';
+import About from './components/sections/About.tsx';
 import Skills from './components/sections/Skills.tsx';
 import Projects from './components/sections/Projects.tsx';
+import Contact from './components/sections/Contact.tsx';
 import type { Skill, Project, Theme, Page } from './types.ts';
 import './index.css';
 
@@ -127,27 +130,34 @@ export default function App() {
   if (error) return <div className="status error">{error}</div>;
 
   return (
-    <div className="app">
-      <Header
-        theme={theme}
-        toggleTheme={toggleTheme}
-        onAdminClick={() => setPage(token ? 'admin' : 'login')}
-      />
+    <>
+      <Navbar />
+      <div className="app">
+        <Hero
+          theme={theme}
+          toggleTheme={toggleTheme}
+          onAdminClick={() => setPage(token ? 'admin' : 'login')}
+        />
 
-      <Skills
-        categories={categories}
-        activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
-        filteredSkills={filteredSkills}
-      />
+        <About />
 
-      <Projects
-        projects={projects}
-        visibleProjects={visibleProjects}
-        showAllProjects={showAllProjects}
-        setShowAllProjects={setShowAllProjects}
-        hasMoreProjects={hasMoreProjects}
-      />
-    </div>
+        <Skills
+          categories={categories}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          filteredSkills={filteredSkills}
+        />
+
+        <Projects
+          projects={projects}
+          visibleProjects={visibleProjects}
+          showAllProjects={showAllProjects}
+          setShowAllProjects={setShowAllProjects}
+          hasMoreProjects={hasMoreProjects}
+        />
+
+        <Contact />
+      </div>
+    </>
   );
 }

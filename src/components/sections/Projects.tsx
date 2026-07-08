@@ -16,7 +16,7 @@ export default function Projects({
   hasMoreProjects,
 }: ProjectsProps) {
   return (
-    <section className="section fade-in" style={{ animationDelay: '160ms' }}>
+    <section id="projects" className="section fade-in" style={{ animationDelay: '160ms' }}>
       <h2>Projeler</h2>
       <div className="projects-grid">
         {visibleProjects.map((project, i) => (
