@@ -131,13 +131,13 @@ export default function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar
+        theme={theme}
+        toggleTheme={toggleTheme}
+        onAdminClick={() => setPage(token ? 'admin' : 'login')}
+      />
       <div className="app">
-        <Hero
-          theme={theme}
-          toggleTheme={toggleTheme}
-          onAdminClick={() => setPage(token ? 'admin' : 'login')}
-        />
+        <Hero />
 
         <About />
 

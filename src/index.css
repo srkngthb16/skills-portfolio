@@ -117,6 +117,16 @@ html {
 }
 .navbar-link:hover { color: var(--ink); }
 
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.navbar-actions .admin-nav-btn {
+  padding: 8px 14px;
+  font-size: 0.8rem;
+}
+
 .navbar-toggle {
   display: none;
   flex-direction: column;

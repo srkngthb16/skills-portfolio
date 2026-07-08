@@ -1,26 +1,6 @@
-import type { Theme } from '../../types.ts';
-
-interface HeroProps {
-  theme: Theme;
-  toggleTheme: () => void;
-  onAdminClick: () => void;
-}
-
-export default function Hero({ theme, toggleTheme, onAdminClick }: HeroProps) {
+export default function Hero() {
   return (
     <section id="hero" className="hero fade-in">
-      <div className="header-top">
-        <span className="eyebrow">Portfolyo</span>
-        <div className="header-actions">
-          <button className="theme-toggle" onClick={toggleTheme} aria-label="Tema değiştir">
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
-          <a className="admin-nav-btn" href="#login" onClick={onAdminClick}>
-            Admin
-          </a>
-        </div>
-      </div>
-
       <div className="hero-main">
         <img
           className="hero-photo"

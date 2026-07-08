@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { Theme } from '../../types.ts';
 
 const NAV_LINKS = [
   { href: '#hero', label: 'Anasayfa' },
@@ -8,7 +9,13 @@ const NAV_LINKS = [
   { href: '#contact', label: 'İletişim' },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  theme: Theme;
+  toggleTheme: () => void;
+  onAdminClick: () => void;
+}
+
+export default function Navbar({ theme, toggleTheme, onAdminClick }: NavbarProps) {
   const [open, setOpen] = useState(false);
 
   function handleLinkClick() {
@@ -30,16 +37,25 @@ export default function Navbar() {
           ))}
         </div>
 
-        <button
-          className="navbar-toggle"
-          onClick={() => setOpen((o) => !o)}
-          aria-label="Menüyü aç/kapat"
-          aria-expanded={open}
-        >
-          <span className={`navbar-toggle-bar ${open ? 'open' : ''}`} />
-          <span className={`navbar-toggle-bar ${open ? 'open' : ''}`} />
-          <span className={`navbar-toggle-bar ${open ? 'open' : ''}`} />
-        </button>
+        <div className="navbar-actions">
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Tema değiştir">
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+          <a className="admin-nav-btn" href="#login" onClick={onAdminClick}>
+            Admin
+          </a>
+
+          <button
+            className="navbar-toggle"
+            onClick={() => setOpen((o) => !o)}
+            aria-label="Menüyü aç/kapat"
+            aria-expanded={open}
+          >
+            <span className={`navbar-toggle-bar ${open ? 'open' : ''}`} />
+            <span className={`navbar-toggle-bar ${open ? 'open' : ''}`} />
+            <span className={`navbar-toggle-bar ${open ? 'open' : ''}`} />
+          </button>
+        </div>
       </div>
 
       {open && (
