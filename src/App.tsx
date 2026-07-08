@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import Login from './pages/Login.tsx';
 import Admin from './pages/Admin.tsx';
+import Header from './components/layout/Header.tsx';
+import Skills from './components/sections/Skills.tsx';
+import Projects from './components/sections/Projects.tsx';
 import type { Skill, Project, Theme, Page } from './types.ts';
 import './index.css';
 
@@ -125,80 +128,26 @@ export default function App() {
 
   return (
     <div className="app">
-      <header className="header fade-in">
-        <div className="header-top">
-          <span className="eyebrow">Portfolyo · API</span>
-          <div className="header-actions">
-            <button className="theme-toggle" onClick={toggleTheme} aria-label="Tema değiştir">
-              {theme === 'light' ? '🌙' : '☀️'}
-            </button>
-            <a
-              className="admin-nav-btn"
-              href="#login"
-              onClick={() => setPage(token ? 'admin' : 'login')}
-            >
-              Admin
-            </a>
-          </div>
-        </div>
-        <h1>Serkan Dalgıç</h1>
-        <p>Frontend Developer — Yetenekler &amp; Projeler</p>
-      </header>
+      <Header
+        theme={theme}
+        toggleTheme={toggleTheme}
+        onAdminClick={() => setPage(token ? 'admin' : 'login')}
+      />
 
-      <section className="section fade-in" style={{ animationDelay: '80ms' }}>
-        <h2>Yetenekler</h2>
-        <div className="filters">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              className={cat === activeCategory ? 'filter active' : 'filter'}
-              onClick={() => setActiveCategory(cat)}
-            >{cat}</button>
-          ))}
-        </div>
-        <div className="skills-grid">
-          {filteredSkills.map((skill, i) => (
-            <div
-              key={skill.id}
-              className="skill-card fade-in-up"
-              style={{ animationDelay: `${80 + i * 35}ms` }}
-            >
-              <span className="skill-name">{skill.name}</span>
-              <span className="skill-level">{skill.level}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Skills
+        categories={categories}
+        activeCategory={activeCategory}
+        setActiveCategory={setActiveCategory}
+        filteredSkills={filteredSkills}
+      />
 
-      <section className="section fade-in" style={{ animationDelay: '160ms' }}>
-        <h2>Projeler</h2>
-        <div className="projects-grid">
-          {visibleProjects.map((project, i) => (
-            <div
-              key={project.id}
-              className="project-card fade-in-up"
-              style={{ animationDelay: `${200 + i * 60}ms` }}
-            >
-              <h3>{project.title}</h3>
-              <p>{project.description}</p>
-              <div className="tech-list">
-                {project.tech.map((t) => (
-                  <span key={t} className="tech-pill">{t}</span>
-                ))}
-              </div>
-              <a href={project.githubUrl} target="_blank" rel="noreferrer" className="project-link">
-                GitHub'da görüntüle <span className="arrow">→</span>
-              </a>
-            </div>
-          ))}
-        </div>
-        {hasMoreProjects && (
-          <button className="show-more" onClick={() => setShowAllProjects((p) => !p)}>
-            {showAllProjects ? 'Daha az göster' : `Tüm projeleri göster (${projects.length})`}
-            <span className={`chevron ${showAllProjects ? 'up' : ''}`}>⌄</span>
-          </button>
-        )}
-      </section>
+      <Projects
+        projects={projects}
+        visibleProjects={visibleProjects}
+        showAllProjects={showAllProjects}
+        setShowAllProjects={setShowAllProjects}
+        hasMoreProjects={hasMoreProjects}
+      />
     </div>
   );
 }
