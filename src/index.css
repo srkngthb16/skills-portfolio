@@ -82,6 +82,15 @@ body {
 }
 
 /* ---------- scroll to top button ---------- */
+@keyframes scrollTopPop {
+  0% { opacity: 0; transform: translateY(16px) scale(0.85); }
+  60% { opacity: 1; transform: translateY(-4px) scale(1.05); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes arrowFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
 .scroll-top-btn {
   position: fixed;
   right: 24px;
@@ -101,20 +110,24 @@ body {
   opacity: 0;
   transform: translateY(16px) scale(0.9);
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease, background 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease;
   z-index: 40;
 }
 .scroll-top-btn.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+  animation: scrollTopPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   pointer-events: auto;
 }
+.scroll-top-btn .arrow-icon { display: inline-flex; }
+.scroll-top-btn:hover .arrow-icon { animation: arrowFloat 0.9s ease-in-out infinite; }
 .scroll-top-btn:hover {
   border-color: var(--accent);
   background: var(--accent-soft);
+  box-shadow: 0 14px 28px -12px rgba(0,0,0,0.4);
 }
 @media (prefers-reduced-motion: reduce) {
-  .scroll-top-btn { transition: opacity 0.15s ease; transform: none; }
+  .scroll-top-btn { transition: opacity 0.15s ease; animation: none !important; opacity: 0; transform: none; }
+  .scroll-top-btn.visible { opacity: 1; }
+  .scroll-top-btn:hover .arrow-icon { animation: none; }
 }
 @media (max-width: 640px) {
   .scroll-top-btn { right: 16px; bottom: 16px; width: 40px; height: 40px; }
@@ -442,6 +455,141 @@ html {
 }
 .contact-link .arrow { color: var(--text-dim); transition: transform 0.18s ease; }
 .contact-link:hover .arrow { transform: translateX(3px); color: var(--accent-text); }
+
+/* ---------- contact form ---------- */
+.contact-form {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 480px;
+}
+
+.form-field {
+  position: relative;
+}
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 8px 2px 10px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.form-field textarea { min-height: 84px; }
+.form-field label {
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+.form-field input:focus + label,
+.form-field textarea:focus + label,
+.form-field input:not(:placeholder-shown) + label,
+.form-field textarea:not(:placeholder-shown) + label {
+  transform: translateY(-20px) scale(0.82);
+  color: var(--accent-text);
+}
+.field-underline {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: var(--accent);
+  transition: width 0.28s ease;
+}
+.form-field input:focus ~ .field-underline,
+.form-field textarea:focus ~ .field-underline {
+  width: 100%;
+}
+.form-field input:disabled,
+.form-field textarea:disabled { opacity: 0.6; }
+
+.form-submit {
+  align-self: flex-start;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.form-submit:hover { transform: translateY(-1px); }
+.form-submit:active { transform: translateY(0); }
+.form-submit:disabled { cursor: default; opacity: 0.85; }
+.form-submit-spinner {
+  width: 0;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: width 0.2s ease;
+}
+.form-submit.is-sending .form-submit-spinner {
+  width: 14px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: var(--bg);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes statusSlideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.form-status {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
+  padding: 12px 16px;
+  border-radius: 10px;
+}
+.form-status.show {
+  display: flex;
+  animation: statusSlideIn 0.3s ease;
+}
+.form-status-success {
+  color: #3f7d4f;
+  background: color-mix(in srgb, #3f7d4f 12%, transparent);
+}
+.form-status-error {
+  color: #b0483f;
+  background: color-mix(in srgb, #b0483f 10%, transparent);
+}
+.status-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3f7d4f;
+  color: #fff;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .form-status.show { animation: none; }
+  .form-submit.is-sending .form-submit-spinner { animation: none; }
+}
 
 /* ---------- header (eski, admin/login gibi diğer sayfalarda hâlâ kullanılıyor) ---------- */
 .header { margin-bottom: 56px; }

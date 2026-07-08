@@ -21,7 +21,7 @@ export default function ScrollToTop() {
       onClick={scrollToTop}
       aria-label="Sayfa başına dön"
     >
-      ↑
+      <span className="arrow-icon">↑</span>
     </button>
   );
 }
