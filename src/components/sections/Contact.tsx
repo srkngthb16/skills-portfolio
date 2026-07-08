@@ -1,4 +1,5 @@
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { GitHubIcon, LinkedInIcon, MailIcon } from '../icons/SocialIcons';
 
 export default function Contact() {
   const ref = useScrollReveal<HTMLElement>();
@@ -10,16 +11,17 @@ export default function Contact() {
       </p>
       <div className="contact-links">
         <a href="https://github.com/srkngthb16" target="_blank" rel="noreferrer" className="contact-link">
+          <GitHubIcon />
           <span className="contact-link-label">GitHub</span>
           <span className="arrow">→</span>
         </a>
-        {/* TODO: gerçek LinkedIn URL'si eklenecek */}
-        <a href="#" target="_blank" rel="noreferrer" className="contact-link">
+        <a href="https://www.linkedin.com/in/serkan-dalgıç-37583b377/" target="_blank" rel="noreferrer" className="contact-link">
+          <LinkedInIcon />
           <span className="contact-link-label">LinkedIn</span>
           <span className="arrow">→</span>
         </a>
-        {/* TODO: gerçek e-posta adresi eklenecek */}
-        <a href="mailto:serkan@example.com" className="contact-link">
+        <a href="mailto:sohbetler16_son@icloud.com" className="contact-link">
+          <MailIcon />
           <span className="contact-link-label">E-posta</span>
           <span className="arrow">→</span>
         </a>

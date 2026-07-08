@@ -227,7 +227,8 @@ html {
    ========================================================== */
 
 .hero {
-  margin-bottom: 200px;
+  margin-bottom: 220px;
+  padding-top: 20px;
   scroll-margin-top: 76px;
 }
 
@@ -277,6 +278,9 @@ html {
   margin-bottom: 20px;
 }
 .social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   color: var(--text-dim);
   text-decoration: none;
   font-size: 0.86rem;
@@ -303,7 +307,7 @@ html {
 .hero-cta:hover .arrow { transform: translateX(3px); }
 
 @media (max-width: 640px) {
-  .hero { margin-bottom: 120px; }
+  .hero { margin-bottom: 140px; }
   .hero-main {
     flex-direction: column;
     align-items: center;
@@ -420,7 +424,7 @@ html {
 .contact-link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -431,6 +435,7 @@ html {
   font-size: 0.92rem;
   transition: all 0.18s ease;
 }
+.contact-link-label { flex: 1; }
 .contact-link:hover {
   border-color: var(--accent);
   background: var(--accent-soft);
@@ -488,7 +493,7 @@ html {
 }
 
 /* ---------- sections ---------- */
-.section { margin-bottom: 140px; }
+.section { margin-bottom: 160px; padding-top: 20px; }
 .app > *:last-child { margin-bottom: 0; }
 .section h2 {
   font-size: 0.78rem;

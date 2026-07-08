@@ -1,4 +1,5 @@
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { GitHubIcon, LinkedInIcon } from '../icons/SocialIcons';
 
 export default function Hero() {
   const ref = useScrollReveal<HTMLElement>();
@@ -18,12 +19,13 @@ export default function Hero() {
             React ve TypeScript ile modern, güvenli ve ölçeklenebilir web uygulamaları geliştiriyorum.
           </p>
           <div className="hero-socials">
-            {/* TODO: gerçek LinkedIn URL'si eklenecek */}
-            <a href="https://github.com/srkngthb16" target="_blank" rel="noreferrer" className="social-link">
-              GitHub
+            <a href="https://github.com/srkngthb16" target="_blank" rel="noreferrer" className="social-link" aria-label="GitHub">
+              <GitHubIcon />
+              <span>GitHub</span>
             </a>
-            <a href="#" target="_blank" rel="noreferrer" className="social-link">
-              LinkedIn
+            <a href="https://www.linkedin.com/in/serkan-dalgıç-37583b377/" target="_blank" rel="noreferrer" className="social-link" aria-label="LinkedIn">
+              <LinkedInIcon />
+              <span>LinkedIn</span>
             </a>
             <a href="#contact" className="social-link">
               İletişim
