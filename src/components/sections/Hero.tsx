@@ -1,6 +1,9 @@
+import { useScrollReveal } from '../../hooks/useScrollReveal';
+
 export default function Hero() {
+  const ref = useScrollReveal<HTMLElement>();
   return (
-    <section id="hero" className="hero fade-in">
+    <section id="hero" className="hero reveal" ref={ref}>
       <div className="hero-main">
         <img
           className="hero-photo"

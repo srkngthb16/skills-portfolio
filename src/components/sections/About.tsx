@@ -5,9 +5,12 @@ const STATS = [
   { label: 'Sertifika', value: '5+' },
 ];
 
+import { useScrollReveal } from '../../hooks/useScrollReveal';
+
 export default function About() {
+  const ref = useScrollReveal<HTMLElement>();
   return (
-    <section id="about" className="section about fade-in">
+    <section id="about" className="section about reveal" ref={ref}>
       <h2>Hakkımda</h2>
       <div className="about-grid">
         <img

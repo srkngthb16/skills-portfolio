@@ -1,4 +1,5 @@
 import type { Skill } from '../../types.ts';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 interface SkillsProps {
   categories: string[];
@@ -13,8 +14,9 @@ export default function Skills({
   setActiveCategory,
   filteredSkills,
 }: SkillsProps) {
+  const ref = useScrollReveal<HTMLElement>();
   return (
-    <section id="skills" className="section fade-in" style={{ animationDelay: '80ms' }}>
+    <section id="skills" className="section reveal" ref={ref}>
       <h2>Yetenekler</h2>
       <div className="filters">
         {categories.map((cat) => (
@@ -26,12 +28,8 @@ export default function Skills({
         ))}
       </div>
       <div className="skills-grid">
-        {filteredSkills.map((skill, i) => (
-          <div
-            key={skill.id}
-            className="skill-card fade-in-up"
-            style={{ animationDelay: `${80 + i * 35}ms` }}
-          >
+        {filteredSkills.map((skill) => (
+          <div key={skill.id} className="skill-card">
             <span className="skill-name">{skill.name}</span>
             <span className="skill-level">{skill.level}</span>
           </div>

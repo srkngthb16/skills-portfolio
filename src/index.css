@@ -66,6 +66,21 @@ body {
   .fade-in, .fade-in-up { animation: none; opacity: 1; }
 }
 
+/* ---------- scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: opacity, transform;
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: none; opacity: 1; transform: none; }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -173,7 +188,7 @@ html {
    ========================================================== */
 
 .hero {
-  margin-bottom: 56px;
+  margin-bottom: 140px;
   scroll-margin-top: 76px;
 }
 
@@ -251,10 +266,13 @@ html {
 @media (max-width: 640px) {
   .hero-main {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     gap: 20px;
   }
   .hero-photo { width: 128px; height: 128px; }
+  .hero-tagline { max-width: 100%; }
+  .hero-socials { justify-content: center; }
 }
 
 /* ==========================================================
@@ -335,8 +353,9 @@ html {
 }
 
 @media (max-width: 640px) {
-  .about-grid { flex-direction: column; }
+  .about-grid { flex-direction: column; align-items: center; text-align: center; }
   .about-photo { width: 100%; max-width: 240px; }
+  .about-stats { justify-content: center; }
 }
 
 /* ==========================================================
@@ -429,7 +448,8 @@ html {
 }
 
 /* ---------- sections ---------- */
-.section { margin-bottom: 52px; }
+.section { margin-bottom: 140px; }
+.app > *:last-child { margin-bottom: 0; }
 .section h2 {
   font-size: 0.78rem;
   text-transform: uppercase;

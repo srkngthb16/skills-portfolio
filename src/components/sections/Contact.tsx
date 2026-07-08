@@ -1,6 +1,9 @@
+import { useScrollReveal } from '../../hooks/useScrollReveal';
+
 export default function Contact() {
+  const ref = useScrollReveal<HTMLElement>();
   return (
-    <section id="contact" className="section contact fade-in">
+    <section id="contact" className="section contact reveal" ref={ref}>
       <h2>İletişim</h2>
       <p className="contact-intro">
         Bir proje fikriniz mi var, yoksa sadece merhaba mı demek istiyorsunuz? Aşağıdaki kanallardan ulaşabilirsiniz.

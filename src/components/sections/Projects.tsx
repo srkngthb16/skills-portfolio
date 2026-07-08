@@ -1,4 +1,5 @@
 import type { Project } from '../../types.ts';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 interface ProjectsProps {
   projects: Project[];
@@ -15,16 +16,13 @@ export default function Projects({
   setShowAllProjects,
   hasMoreProjects,
 }: ProjectsProps) {
+  const ref = useScrollReveal<HTMLElement>();
   return (
-    <section id="projects" className="section fade-in" style={{ animationDelay: '160ms' }}>
+    <section id="projects" className="section reveal" ref={ref}>
       <h2>Projeler</h2>
       <div className="projects-grid">
-        {visibleProjects.map((project, i) => (
-          <div
-            key={project.id}
-            className="project-card fade-in-up"
-            style={{ animationDelay: `${200 + i * 60}ms` }}
-          >
+        {visibleProjects.map((project) => (
+          <div key={project.id} className="project-card">
             <h3>{project.title}</h3>
             <p>{project.description}</p>
             <div className="tech-list">
