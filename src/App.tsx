@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Login from './pages/Login.tsx';
 import Admin from './pages/Admin.tsx';
 import Navbar from './components/layout/Navbar.tsx';
+import ScrollToTop from './components/layout/ScrollToTop.tsx';
 import Hero from './components/sections/Hero.tsx';
 import About from './components/sections/About.tsx';
 import Skills from './components/sections/Skills.tsx';
@@ -158,6 +159,7 @@ export default function App() {
 
         <Contact />
       </div>
+      <ScrollToTop />
     </>
   );
 }

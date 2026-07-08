@@ -81,6 +81,45 @@ body {
   .reveal { transition: none; opacity: 1; transform: none; }
 }
 
+/* ---------- scroll to top button ---------- */
+.scroll-top-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 24px -12px rgba(0,0,0,0.35);
+  opacity: 0;
+  transform: translateY(16px) scale(0.9);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.15s ease, border-color 0.15s ease;
+  z-index: 40;
+}
+.scroll-top-btn.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.scroll-top-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-top-btn { transition: opacity 0.15s ease; transform: none; }
+}
+@media (max-width: 640px) {
+  .scroll-top-btn { right: 16px; bottom: 16px; width: 40px; height: 40px; }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -188,7 +227,7 @@ html {
    ========================================================== */
 
 .hero {
-  margin-bottom: 140px;
+  margin-bottom: 200px;
   scroll-margin-top: 76px;
 }
 
@@ -264,6 +303,7 @@ html {
 .hero-cta:hover .arrow { transform: translateX(3px); }
 
 @media (max-width: 640px) {
+  .hero { margin-bottom: 120px; }
   .hero-main {
     flex-direction: column;
     align-items: center;
