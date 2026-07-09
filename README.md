@@ -9,6 +9,10 @@ Yeteneklerimi ve GitHub projelerimi gösteren, kendi yazdığım API üzerinden 
 ## ✨ Özellikler
 
 - ⚛️ React + **TypeScript** (Vite) arayüz
+- 🧭 Navbar, Hero, Hakkımda, Yetenekler, Projeler, İletişim bölümleriyle tam bir tek-sayfa portfolyo
+- 🎬 Scroll ile yavaş yavaş beliren bölümler (IntersectionObserver tabanlı, `prefers-reduced-motion` destekli)
+- ⬆️ Animasyonlu "yukarı çık" butonu
+- ✉️ **EmailJS** ile çalışan animasyonlu iletişim formu — mesajlar doğrudan e-postaya düşer
 - ☁️ Vercel serverless API — tamamı **TypeScript**
 - 🐙 Projeler GitHub'dan **canlı** çekiliyor (rate-limit korumalı, fallback'li)
 - 🗄️ Yetenekler **Supabase** (PostgreSQL) veritabanında tutuluyor
@@ -46,11 +50,25 @@ data/
   skills.json           → fallback verisi
   projects.json         → fallback verisi
 src/
-  App.tsx               → ana sayfa
+  App.tsx               → ana sayfa, tüm bölümleri bir araya getirir
   types.ts              → paylaşılan frontend tipleri
+  hooks/
+    useScrollReveal.ts   → scroll ile beliren bölümler için IntersectionObserver hook'u
+  components/
+    layout/
+      Navbar.tsx         → sticky navbar (tema butonu + admin linki + mobil hamburger)
+      ScrollToTop.tsx    → animasyonlu yukarı çık butonu
+    sections/
+      Hero.tsx           → foto, isim, unvan, sosyal linkler, CTA
+      About.tsx          → foto, biyografi, istatistik kartları, CV linki
+      Skills.tsx         → filtrelenebilir yetenek listesi
+      Projects.tsx       → GitHub'dan çekilen proje kartları
+      Contact.tsx        → EmailJS formu + iletişim linkleri
+    icons/
+      SocialIcons.tsx    → inline SVG marka ikonları (GitHub, LinkedIn, Mail, Send)
   pages/
-    Login.tsx           → admin giriş ekranı
-    Admin.tsx           → admin paneli (CRUD arayüzü)
+    Login.tsx            → admin giriş ekranı
+    Admin.tsx            → admin paneli (CRUD arayüzü)
 tests/
   lib/                  → saf mantık testleri (validate, rateLimit, cors)
   api/                  → handler testleri (Supabase/GitHub mock'lanarak)
@@ -93,6 +111,9 @@ npm run test:watch # dosya değiştikçe otomatik yeniden çalıştırma
 | `SUPABASE_URL` | Supabase proje URL'i |
 | `SUPABASE_ANON_KEY` | Supabase anon public key |
 | `SUPABASE_SERVICE_KEY` | Supabase service_role key (sadece backend, RLS bypass için) |
+| `VITE_EMAILJS_SERVICE_ID` | EmailJS servis kimliği (opsiyonel — verilmezse koddaki varsayılan kullanılır) |
+| `VITE_EMAILJS_TEMPLATE_ID` | EmailJS template kimliği (opsiyonel) |
+| `VITE_EMAILJS_PUBLIC_KEY` | EmailJS public key — client tarafında açık olması tasarımı gereği normaldir (opsiyonel) |
 
 ---
 
@@ -168,3 +189,8 @@ React · TypeScript · Vite · Vercel Serverless Functions · Supabase (PostgreS
 - [x] Web Güvenliği (CORS politikası, güvenlik header'ları)
 - [x] Test (Vitest ile 44 test — unit + handler testleri)
 - [x] CI/CD (GitHub Actions — typecheck + test + build)
+- [x] Navbar, Hero, Hakkımda, İletişim bölümleri (App.tsx parçalandı)
+- [x] Scroll reveal animasyonu + bölümler arası ferah boşluklar
+- [x] Animasyonlu yukarı çık butonu
+- [x] İnline SVG marka ikonları (GitHub, LinkedIn, Mail, Send)
+- [x] EmailJS ile animasyonlu iletişim formu (ortalanmış, floating label)

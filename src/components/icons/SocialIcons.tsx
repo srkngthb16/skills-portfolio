@@ -51,3 +51,18 @@ export function MailIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function SendIcon({ className }: IconProps) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M2.94 2.94a1 1 0 0 1 1.07-.23l17.5 7a1 1 0 0 1 0 1.86l-17.5 7a1 1 0 0 1-1.35-1.24L5.6 12 2.66 4.18a1 1 0 0 1 .28-1.24Zm3.6 8.06L4.6 17.5 18.13 12 4.6 6.5 6.54 11H12v1H6.54Z" />
+    </svg>
+  );
+}

@@ -452,11 +452,23 @@ html {
 
 /* ---------- contact form ---------- */
 .contact-form {
-  margin-top: 28px;
+  margin: 28px auto 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 22px;
+  width: 100%;
   max-width: 480px;
+}
+.contact-form .form-field { width: 100%; }
+.contact-form .form-field input,
+.contact-form .form-field textarea { text-align: center; }
+.contact-form .form-field label { left: 50%; transform: translateX(-50%); }
+.contact-form .form-field input:focus + label,
+.contact-form .form-field textarea:focus + label,
+.contact-form .form-field input:not(:placeholder-shown) + label,
+.contact-form .form-field textarea:not(:placeholder-shown) + label {
+  transform: translate(-50%, -20px) scale(0.82);
 }
 
 .form-field {
@@ -510,8 +522,14 @@ html {
 .form-field input:disabled,
 .form-field textarea:disabled { opacity: 0.6; }
 
+@keyframes sendLaunch {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  45% { transform: translate(5px, -5px) rotate(20deg); opacity: 0; }
+  55% { transform: translate(-5px, 5px) rotate(20deg); opacity: 0; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+}
 .form-submit {
-  align-self: flex-start;
+  align-self: center;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -519,17 +537,27 @@ html {
   background: var(--ink);
   color: var(--bg);
   border: none;
-  padding: 12px 22px;
+  padding: 12px 24px;
   border-radius: 10px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   overflow: hidden;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease;
 }
-.form-submit:hover { transform: translateY(-1px); }
-.form-submit:active { transform: translateY(0); }
+.form-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px -10px rgba(0,0,0,0.4);
+}
+.form-submit:hover:not(:disabled) .form-submit-icon {
+  animation: sendLaunch 0.6s ease;
+}
+.form-submit:active:not(:disabled) { transform: translateY(0); }
 .form-submit:disabled { cursor: default; opacity: 0.85; }
+.form-submit-icon {
+  display: inline-flex;
+  transform-origin: center;
+}
 .form-submit-spinner {
   width: 0;
   height: 14px;
@@ -543,6 +571,7 @@ html {
   border-top-color: var(--bg);
   animation: spin 0.7s linear infinite;
 }
+.form-submit.is-sending .form-submit-icon { display: none; }
 
 @keyframes statusSlideIn {
   from { opacity: 0; transform: translateY(-6px); }
@@ -583,6 +612,7 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .form-status.show { animation: none; }
   .form-submit.is-sending .form-submit-spinner { animation: none; }
+  .form-submit:hover .form-submit-icon { animation: none; }
 }
 
 /* ---------- header (eski, admin/login gibi diğer sayfalarda hâlâ kullanılıyor) ---------- */

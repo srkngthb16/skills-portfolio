@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import emailjs from '@emailjs/browser';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
-import { GitHubIcon, LinkedInIcon, MailIcon } from '../icons/SocialIcons';
+import { GitHubIcon, LinkedInIcon, MailIcon, SendIcon } from '../icons/SocialIcons';
 
 type Status = 'idle' | 'sending' | 'success' | 'error';
 
@@ -100,6 +100,7 @@ export default function Contact() {
 
         <button type="submit" className={`form-submit${status === 'sending' ? ' is-sending' : ''}`} disabled={status === 'sending'}>
           <span className="form-submit-label">{status === 'sending' ? 'Gönderiliyor' : 'Mesajı Gönder'}</span>
+          <span className="form-submit-icon"><SendIcon /></span>
           <span className="form-submit-spinner" />
         </button>
 
