@@ -5,9 +5,11 @@ import { GitHubIcon, LinkedInIcon, MailIcon } from '../icons/SocialIcons';
 
 type Status = 'idle' | 'sending' | 'success' | 'error';
 
-const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined;
-const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string | undefined;
-const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined;
+// Not: EmailJS public key tasarımı gereği client tarafında açık kalabilir;
+// istenirse EmailJS panelinden "Allowed origins" ile alan adına kısıtlanabilir.
+const SERVICE_ID = (import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined) || 'service_hbsxqh4';
+const TEMPLATE_ID = (import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string | undefined) || 'template_1xcz30d';
+const PUBLIC_KEY = (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined) || 'XrC92GDhG6voUNybL';
 
 export default function Contact() {
   const ref = useScrollReveal<HTMLElement>();
@@ -50,28 +52,11 @@ export default function Contact() {
       <p className="contact-intro">
         Bir proje fikriniz mi var, yoksa sadece merhaba mı demek istiyorsunuz? Aşağıdaki kanallardan ya da formdan ulaşabilirsiniz.
       </p>
-      <div className="contact-links">
-        <a href="https://github.com/srkngthb16" target="_blank" rel="noreferrer" className="contact-link">
-          <GitHubIcon />
-          <span className="contact-link-label">GitHub</span>
-          <span className="arrow">→</span>
-        </a>
-        <a href="https://www.linkedin.com/in/serkan-dalgıç-37583b377/" target="_blank" rel="noreferrer" className="contact-link">
-          <LinkedInIcon />
-          <span className="contact-link-label">LinkedIn</span>
-          <span className="arrow">→</span>
-        </a>
-        <a href="mailto:sohbetler16_son@icloud.com" className="contact-link">
-          <MailIcon />
-          <span className="contact-link-label">E-posta</span>
-          <span className="arrow">→</span>
-        </a>
-      </div>
-
       <form className="contact-form" onSubmit={handleSubmit}>
         <div className="form-field">
           <input
             id="cf-name"
+            name="from_name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -86,6 +71,7 @@ export default function Contact() {
         <div className="form-field">
           <input
             id="cf-email"
+            name="from_email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -100,6 +86,7 @@ export default function Contact() {
         <div className="form-field">
           <textarea
             id="cf-message"
+            name="message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder=" "
@@ -123,6 +110,21 @@ export default function Contact() {
           Mesaj gönderilemedi. Doğrudan e-posta üzerinden de ulaşabilirsiniz.
         </div>
       </form>
+
+      <div className="contact-links">
+        <a href="https://github.com/srkngthb16" target="_blank" rel="noreferrer" className="contact-link">
+          <GitHubIcon />
+          <span>GitHub</span>
+        </a>
+        <a href="https://www.linkedin.com/in/serkan-dalgıç-37583b377/" target="_blank" rel="noreferrer" className="contact-link">
+          <LinkedInIcon />
+          <span>LinkedIn</span>
+        </a>
+        <a href="mailto:sohbetler16_son@icloud.com" className="contact-link">
+          <MailIcon />
+          <span>sohbetler16_son@icloud.com</span>
+        </a>
+      </div>
     </section>
   );
 }
