@@ -36,7 +36,6 @@ export default function About() {
             ))}
           </div>
 
-          {/* TODO: güncel CV dosyası public/cv.pdf olarak eklenecek */}
           <a href="/cv.pdf" download className="cv-download">
             CV İndir <span className="arrow">↓</span>
           </a>
