@@ -179,18 +179,4 @@ Bu proje, OWASP Top 10'daki yaygın web açıklarına karşı şu önlemleri al�
 
 ## 🛠️ Kullanılan teknolojiler
 
-React · TypeScript · Vite · Vercel Serverless Functions · Supabase (PostgreSQL + Auth) · GitHub REST API
-
----
-
-## 🔜 Sırada ne var?
-
-- [x] Backend Security (rate limiting, input sanitization)
-- [x] Web Güvenliği (CORS politikası, güvenlik header'ları)
-- [x] Test (Vitest ile 44 test — unit + handler testleri)
-- [x] CI/CD (GitHub Actions — typecheck + test + build)
-- [x] Navbar, Hero, Hakkımda, İletişim bölümleri (App.tsx parçalandı)
-- [x] Scroll reveal animasyonu + bölümler arası ferah boşluklar
-- [x] Animasyonlu yukarı çık butonu
-- [x] İnline SVG marka ikonları (GitHub, LinkedIn, Mail, Send)
-- [x] EmailJS ile animasyonlu iletişim formu (ortalanmış, floating label)
+React · TypeScript · Vite · Vercel Serverless Functions · Supabase (PostgreSQL + Auth) · GitHub REST APIs
